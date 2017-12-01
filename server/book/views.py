@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
 
 
 from .models import WebSite, Category, Article, Chapter
@@ -31,6 +33,15 @@ class CategoryViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Ret
     retrieve:
         站点分类详情
     """
+    def create(self, request, *args, **kwargs):
+        _data = request.data.copy()
+        _data['site'] = self.kwargs.get('website_id')
+        serializer = self.get_serializer(data=_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def get_queryset(self):
         queryset = Category.objects.filter(site=self.kwargs.get('website_id'))
         return queryset
