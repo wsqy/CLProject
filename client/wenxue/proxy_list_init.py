@@ -4,8 +4,7 @@ import datetime
 import requests
 from pyquery import PyQuery as pq
 
-base_url = "https://t66y.com/thread0806.php?fid=20&page=1"
-api_url = "http://127.0.0.1:8000/websites/1/categorys/2/articles/"
+base_url = "https://t66y.com/thread0806.php?fid=20&page="
 
 proxies = {
     "http": "http://127.0.0.1:40573",
@@ -34,6 +33,7 @@ def transform_url(site=r'http://t66y.com', url=''):
 
 
 def get_content(url):
+    print(url)
     r = requests.get(url, proxies=proxies)
     r.encoding = 'gbk'
     return r.text
@@ -41,6 +41,7 @@ def get_content(url):
 def analysis_data(r_text):
     d = pq(r_text)
     per_list = d.find('.tr3.t_one.tac').items()
+    data_list = []
     for per in per_list:
         # print(per)
         # title
@@ -55,21 +56,24 @@ def analysis_data(r_text):
             'name': user_name,
             'href': user_href
         }
+        # 时间
+        time = transform_date(per('.f12 .s3').text())
+
         dic = {
             'title': title_name,
             'url': title_href,
             'author': json.dumps(user_info)
         }
-        # 时间
-        # time = transform_date(per('.f12 .s3').text())
-        time = per('.f12 .s3').text()
-        if '今天' in time:
-            print(title_name)
-            r = requests.post(api_url, data=dic)
-            print(r.status_code)
-        else:
-            return
+        data_list.append(dic)
+    return data_list
 
-r_text = get_content(base_url)
-data = analysis_data(r_text)
-print(data)
+# r_text = get_content(base_url + '1')
+# data = analysis_data(r_text)
+# print(data)
+
+data_list = []
+for i in range(1, 26):
+    r_text = get_content(base_url + str(i))
+    data_list.extend(analysis_data(r_text))
+
+print(json.dumps(data_list))
