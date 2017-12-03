@@ -21,5 +21,5 @@ from rest_framework.documentation import include_docs_urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'websites/', include('book.urls')),
-    # url(r'docs/', include_docs_urls(title="追新小说")),
+    url(r'docs/', include_docs_urls(title="追新小说")),
 ]
