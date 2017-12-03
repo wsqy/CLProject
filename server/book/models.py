@@ -51,9 +51,11 @@ class Article(models.Model):
     update_time = models.DateTimeField(verbose_name="更新时间", default=timezone.now)
     total_page = models.IntegerField(default=1, verbose_name="当前页数")
     is_end = models.BooleanField(default=False, verbose_name="是否完结")
-    category = models.ForeignKey("Category", verbose_name="所属分类", null=False)
     # name 作者名
     author = models.CharField(max_length=256, null=True, blank=True, verbose_name="作者信息")
+
+    site = models.ForeignKey("WebSite", verbose_name="所属站点", null=False)
+    category = models.ForeignKey("Category", verbose_name="所属分类", null=False)
 
     class Meta:
         verbose_name = "文章"
