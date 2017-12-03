@@ -54,7 +54,7 @@ class Article(models.Model):
     # name 作者名
     author = models.CharField(max_length=256, null=True, blank=True, verbose_name="作者信息")
 
-    site = models.ForeignKey("WebSite", verbose_name="所属站点", null=False)
+    site = models.ForeignKey("WebSite", verbose_name="所属站点", null=False, default=None)
     category = models.ForeignKey("Category", verbose_name="所属分类", null=False)
 
     class Meta:

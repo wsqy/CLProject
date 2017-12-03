@@ -58,24 +58,20 @@ class ArticleViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
     retrieve:
         文章详情
     """
+    def create(self, request, *args, **kwargs):
+        _data = request.data.copy()
+        _data['site'] = self.kwargs.get('website_id')
+        _data['category'] = self.kwargs.get('category_id')
+        serializer = self.get_serializer(data=_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def get_queryset(self):
         queryset = Article.objects.filter(category=self.kwargs.get('category_id'))
         return queryset
-    serializer_class = ArticleSerializer
 
-
-class ArticleViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """
-    create:
-        创建文章
-    list:
-        返回当前分类文章列表
-    retrieve:
-        文章详情
-    """
-    def get_queryset(self):
-        queryset = Article.objects.filter(category=self.kwargs.get('category_id'))
-        return queryset
     serializer_class = ArticleSerializer
 
 
