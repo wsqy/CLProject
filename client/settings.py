@@ -1,0 +1,13 @@
+REDIS_HOST = '123.206.210.196'
+REDIS_PORT = '6379'
+REDIS_DB_ARTICLE = '3'
+REDIS_PASSWD = 'f886Yjhvuyfy76grhgdFYrtf'
+
+REDIS_KEY_ARTICLE = 'article'
+REDIS_KEY_ARTICLE_LIST = 'article_list'
+
+BASE_URL = "http://123.206.210.196:8000"
+# BASE_URL = "http://127.0.0.1:8000"
+
+WENXUE_ARTICLE_LIST_URL = BASE_URL + '/websites/1/categorys/2/articles'
+WENXUE_ARTICLE_CHAPTER_URL = WENXUE_ARTICLE_LIST_URL + '/%s/chapters'

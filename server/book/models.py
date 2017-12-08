@@ -72,7 +72,7 @@ class Chapter(models.Model):
     article = models.ForeignKey("Article", verbose_name="所属文章", null=False)
     title = models.CharField(max_length=255, verbose_name="章节名", null=True, blank=True)
     content = models.TextField(blank=True, null=True,verbose_name="章节内容")
-    url = models.URLField(blank=True, verbose_name="所在分页地址", unique=True)
+    url = models.URLField(blank=True, verbose_name="所在分页地址")
     create_time = models.DateTimeField(verbose_name="创建时间", default=timezone.now)
     page = models.IntegerField(default=1, verbose_name="所在分页")
     floor = models.IntegerField(default=0, verbose_name="所在楼层")
