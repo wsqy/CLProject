@@ -16,9 +16,9 @@ import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(1, os.path.join(BASE_DIR, 'apps'))
+# sys.path.insert(1, os.path.dirname(BASE_DIR))
+# sys.path.insert(1, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(2, os.path.join(BASE_DIR, 'extra_apps'))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -27,7 +27,7 @@ sys.path.insert(2, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'pylxp0ba2i-x6f5+)-oj*4)^moqp8x-r1c*os_gr)vega!msx&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'xadmin',
     'rest_framework',
-    'djcelery',
-    'django_celery_results',
-    'celerydemo',
+    # 'djcelery',
+    # 'django_celery_results',
+    # 'celerydemo',
     'book',
 ]
 
@@ -150,9 +150,13 @@ REDIS_HOST = '123.206.210.196'
 REDIS_PORT = '6379'
 REDIS_DB_CACHE = '1'
 REDIS_DB_CELERY = '2'
+REDIS_DB_ARTICLE = '3'
 REDIS_PASSWD = 'f886Yjhvuyfy76grhgdFYrtf'
 REDIS_CONN_NOPASSWD = "redis://%s:%s/%s"
 REDIS_CONN_WITHPASS = "redis://:%s@%s:%s/%s"
+
+REDIS_KEY_ARTICLE = 'article'
+REDIS_KEY_ARTICLE_LIST = 'article_list'
 
 CACHES = {
     "default": {
@@ -167,29 +171,29 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-
-
-import djcelery
-from celery.schedules import crontab
-djcelery.setup_loader()
-BROKER_URL = REDIS_CONN_WITHPASS % (REDIS_PASSWD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
-# BROKER_URL = 'redis://:密码@主机地址:端口号/数据库号'
-CELERY_RESULT_BACKEND = REDIS_CONN_WITHPASS % (REDIS_PASSWD, REDIS_HOST, REDIS_PORT, 3)
-
-from datetime import timedelta
-
-
-CELERYBEAT_SCHEDULE = {
-    'add-every-3-seconds': {
-        'task': 'celerydemo.tasks.test_celery',
-        # 'schedule': crontab(minute=u'40', hour=u'17',),
-        'schedule': timedelta(seconds=3),
-        'args': (16, 16)
-    },
-    'timing': {
-        'task': 'celerydemo.tasks.test_multiply',
-        'schedule': crontab(minute='17-20'),
-        # 'schedule': timedelta(seconds=3),
-        'args': (2, 3)
-    },
-}
+#
+#
+# import djcelery
+# from celery.schedules import crontab
+# djcelery.setup_loader()
+# BROKER_URL = REDIS_CONN_WITHPASS % (REDIS_PASSWD, REDIS_HOST, REDIS_PORT, REDIS_DB_CELERY)
+# # BROKER_URL = 'redis://:密码@主机地址:端口号/数据库号'
+# CELERY_RESULT_BACKEND = REDIS_CONN_WITHPASS % (REDIS_PASSWD, REDIS_HOST, REDIS_PORT, 3)
+#
+# from datetime import timedelta
+#
+#
+# CELERYBEAT_SCHEDULE = {
+#     'add-every-3-seconds': {
+#         'task': 'celerydemo.tasks.test_celery',
+#         # 'schedule': crontab(minute=u'40', hour=u'17',),
+#         'schedule': timedelta(seconds=3),
+#         'args': (16, 16)
+#     },
+#     'timing': {
+#         'task': 'celerydemo.tasks.test_multiply',
+#         'schedule': crontab(minute='17-20'),
+#         # 'schedule': timedelta(seconds=3),
+#         'args': (2, 3)
+#     },
+# }
