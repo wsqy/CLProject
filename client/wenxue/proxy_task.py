@@ -56,17 +56,19 @@ def main():
             for dic_data in dic_data_list:
                 dic_data['url'] = r.get('url')
                 dic_data['page'] = 1
-                dic_data['content'] = 'content'
+                # dic_data['content'] = 'content'
                 print("++++++")
                 print(json.dumps(dic_data, ensure_ascii=False))
                 print("++++++222")
                 _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
                 print(_url)
-                req = requests.post( _url, json = json.dumps(dic_data, ensure_ascii=False))
+                req = requests.post( _url, json = json.dumps(dic_data, ensure_ascii=False, allow_redirects=False))
                 # r = requests.get( _url)
                 print(req.status_code)
                 print("++++++111")
                 print(req.text)
+                print("++++++")
+                print(req.headers)
                 print("++++++")
             # print(dic.get('data_list').get(''))1
             count += 1

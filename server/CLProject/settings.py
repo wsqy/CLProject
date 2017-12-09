@@ -27,7 +27,8 @@ sys.path.insert(2, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'pylxp0ba2i-x6f5+)-oj*4)^moqp8x-r1c*os_gr)vega!msx&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -146,6 +147,11 @@ USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地�
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static").replace('\\', '/')
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media").replace('\\', '/')
+
 REDIS_HOST = '123.206.210.196'
 REDIS_PORT = '6379'
 REDIS_DB_CACHE = '1'
