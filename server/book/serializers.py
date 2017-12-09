@@ -40,4 +40,8 @@ class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapter
         fields = "__all__"
-        read_only_fields = ("article", )
+        # exclude = ("article", )
+
+    def validate(self, data):
+        print(data)
+        return data
