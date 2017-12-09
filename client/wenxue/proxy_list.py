@@ -5,12 +5,8 @@ import requests
 from pyquery import PyQuery as pq
 
 base_url = "https://t66y.com/thread0806.php?fid=20&page=1"
-api_url = "http://127.0.0.1:8000/websites/1/categorys/2/articles/"
+api_url = "http://api.viking666.ml/websites/1/categorys/2/articles/"
 
-proxies = {
-    "http": "http://127.0.0.1:40573",
-    "https": "http://127.0.0.1:40573",
-}
 
 def transform_date(date_str):
     if '今天' in date_str:
@@ -34,7 +30,7 @@ def transform_url(site=r'http://t66y.com', url=''):
 
 
 def get_content(url):
-    r = requests.get(url, proxies=proxies)
+    r = requests.get(url)
     r.encoding = 'gbk'
     return r.text
 

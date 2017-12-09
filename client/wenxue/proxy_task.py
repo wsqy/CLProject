@@ -35,9 +35,16 @@ def main():
         #     "url": 'http://t66y.com/htm_data/20/1712/2829288.html',
         # }
         # r = json.dumps(r)
+        print(r)
+        print(type(r))
         if(r):
-            r = json.loads(r)
+            try:
+                r = json.loads(r)
+            except TypeError as e:
+                r = json.loads(r.decode("utf-8"))
             dic = get_first_page(r.get('url'))
+            if not dic:
+                continue
             for dic_data in dic.get("data_list"):
                 dic_data['url'] = r.get('url')
                 dic_data['page'] = 1

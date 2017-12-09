@@ -51,6 +51,8 @@ def get_first_page(url):
     # 网页请求
     r_text = get_content(url)
     d = pq(r_text)
+    if '載入頁面失敗' in d.text():
+        return None
     # 提取总页数
     total_page = d("#last").attr('href').split('=')[-1]
     print(total_page)
