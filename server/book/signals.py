@@ -26,3 +26,5 @@ def create_book(sender, instance=None, created=False, **kwargs):
 
         }
         red.push_task(redis_push_key % (settings.REDIS_KEY_ARTICLE, instance.site_id, instance.category_id), json.dumps(dic))
+
+
