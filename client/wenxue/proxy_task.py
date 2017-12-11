@@ -28,15 +28,15 @@ article_list_key = redis_push_key % (settings.REDIS_KEY_ARTICLE_LIST, 1, 2)
 
 def main():
     count = 0
-    while count < 100:
+    while count < 20:
         r = red.get_task(article_key)
         # r = {
-        #     "id": 2546,
-        #     "url": 'http://t66y.com/htm_data/20/1712/2829288.html',
+        #     "id": 2499,
+        #     "url": 'http://t66y.com/htm_data/20/1712/2821863.html',
         # }
         # r = json.dumps(r)
-        print(r)
-        print(type(r))
+        # print(r)
+        # print(type(r))
         if(r):
             try:
                 r = json.loads(r)
@@ -49,7 +49,7 @@ def main():
                 dic_data['url'] = r.get('url')
                 dic_data['page'] = 1
                 # dic_data['content'] = 'content'
-                print("++++++")
+                # print("++++++")
                 # print(dic_data)
                 print("++++++")
                 _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
@@ -57,14 +57,17 @@ def main():
                 req = requests.post( _url, data = dic_data)
                 # r = requests.get( _url)
                 print(req.status_code)
+                if(str(req.status_code) != '201'):
+                    with open('re.html', 'w') as f:
+                        f.write(req.text)
                 print("++++++")
-            for other_url in dic.get("other_url_list"):
-                dic = {
-                    'id': r.get('id'),
-                    'url': other_url
-                }
-                res = red.push_task(article_list_key, json.dumps(dic))
-                print("%s----%s" % (res, dic.get('url')))
+            # for other_url in dic.get("other_url_list"):
+            #     dic = {
+            #         'id': r.get('id'),
+            #         'url': other_url
+            #     }
+            #     res = red.push_task(article_list_key, json.dumps(dic))
+            #     print("%s----%s" % (res, dic.get('url')))
 
             # print(dic.get('data_list').get(''))1
             count += 1

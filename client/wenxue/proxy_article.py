@@ -26,9 +26,13 @@ def analysis_data(r_text):
             post_text = per('.tipad').text()
             # print(post_text)
             # 解析章节所在楼层
-            lou_id = post_text[post_text.find('回'):][1:-1]
-            if lou_id == '樓':
+            # print(post_text)
+            lou_detail = post_text[post_text.find('回'):]
+            try:
+                lou_id = re.search('\d+', lou_detail).group(0)
+            except Exception as e:
                 lou_id = 0
+
             # 解析文章保存时间
             lou_time = re.search(r'Posted:(.*?) \| ', post_text).group(1)
             # print(lou_time)
@@ -54,11 +58,16 @@ def get_first_page(url):
     if '載入頁面失敗' in d.text():
         return None
     # 提取总页数
-    total_page = d("#last").attr('href').split('=')[-1]
+    # total_page = d("#last").attr('href').split('=')[-1]
+    total_page = 1
+    for page in d(".pages a").items():
+        if page.attr('href'):
+            total_page = page.attr('href').split('=')[-1]
+
     print(total_page)
 
     # 文章的唯一id
-    tid = url[-12:-5]
+    tid = url.split('/')[-1][:-5]
 
     # # 解析文章名
     # article_content = d.text()
@@ -68,8 +77,8 @@ def get_first_page(url):
     # 写入第一页内容
     data_list = analysis_data(r_text)
     other_url_list = []
-    for i in range(2, int(total_page)+1):
-        other_url_list.append(other_url %(tid, str(i)))
+    # for i in range(2, int(total_page)+1):
+    #     other_url_list.append(other_url %(tid, str(i)))
 
     dic = {
         "total_page": total_page,

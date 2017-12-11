@@ -61,7 +61,7 @@ class Article(models.Model):
         verbose_name = "文章"
         verbose_name_plural = verbose_name
         # 设置按权重排序，相同则按id倒序排列
-        ordering = ['-weights', '-id']
+        ordering = ['-weights', 'create_time']
 
     def __str__(self):
         return self.title

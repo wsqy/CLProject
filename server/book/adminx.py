@@ -24,8 +24,9 @@ class CategoryAdmin(object):
 
 class ArticleAdmin(object):
     list_display = ('title', 'update_time', 'total_page', 'is_end')
-    list_filter = ('title',)
+    list_filter = ('title', 'is_end')
     search_fields = ('title', )
+    list_editable=('is_end', )
 
 
 class ChapterAdmin(object):
