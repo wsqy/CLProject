@@ -4,7 +4,7 @@ REDIS_DB_ARTICLE = '3'
 REDIS_PASSWD = 'f886Yjhvuyfy76grhgdFYrtf'
 
 REDIS_KEY_ARTICLE = 'article'
-REDIS_KEY_ARTICLE_LIST = 'article_list'
+REDIS_KEY_ARTICLE_LIST = 'article_other_url'
 
 BASE_URL = "http://123.206.210.196:8000/"
 # BASE_URL = "http://127.0.0.1:8000"

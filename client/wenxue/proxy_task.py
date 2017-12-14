@@ -9,7 +9,7 @@ import random
 import requests
 from client import settings
 from client.RedisObj import RedisObj
-from client.wenxue.proxy_article import get_first_page
+from client.wenxue.proxy_article import get_first_page, get_other_page
 
 red_conf = {
     'REDIS_HOST': settings.REDIS_HOST,
@@ -26,7 +26,7 @@ article_list_key = redis_push_key % (settings.REDIS_KEY_ARTICLE_LIST, 1, 2)
 # print(r)
 # print(json.loads(r))
 
-def main():
+def get_first():
     count = 0
     while count < 20:
         r = red.get_task(article_key)
@@ -75,5 +75,54 @@ def main():
         else:
             return
 
+
+def get_other():
+    count = 0
+    while count < 20:
+        # r = red.get_task(article_list_key)
+        r = {
+            "id": 2587,
+            "url": 'http://t66y.com/htm_data/20/1712/2842337.html',
+        }
+        r = json.dumps(r)
+        print(r)
+        print(type(r))
+        if(r):
+            try:
+                r = json.loads(r)
+            except TypeError as e:
+                r = json.loads(r.decode("utf-8"))
+            dic = get_other_page(r.get('url'))
+            if not dic:
+                continue
+            print(dic)
+            break
+            # for dic_data in dic:
+            #     dic_data['url'] = r.get('url')
+            #     dic_data['page'] = 1
+            #     # dic_data['content'] = 'content'
+            #     # print("++++++")
+            #     # print(dic_data)
+            #     print("++++++")
+            #     _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
+            #     print(_url)
+            #     req = requests.post( _url, data = dic_data)
+            #     # r = requests.get( _url)
+            #     print(req.status_code)
+            #     # if(str(req.status_code) != '201'):
+            #     #     with open('re.html', 'w') as f:
+            #     #         f.write(req.text)
+            #     print("++++++")
+
+            count += 1
+            time.sleep(random.randint(1, 5))
+        else:
+            return
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    if sys.argv[1] == '1':
+        get_first()
+    else:
+        get_other()

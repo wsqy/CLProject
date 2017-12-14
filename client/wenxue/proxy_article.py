@@ -7,7 +7,7 @@ other_url = "https://t66y.com/read.php?tid=%s&page=%s"
 base_url = "https://t66y.com/htm_data/20/1712/2565732.html"
 # base_url = "https://t66y.com/read.php?tid=2793716&page=2"
 
-def analysis_data(r_text):
+def analysis_data(_page, _url, r_text):
     data_list = []
     d = pq(r_text)
     # 查找楼层
@@ -40,8 +40,10 @@ def analysis_data(r_text):
                 'title': title,
                 'content': con,
                 'floor': lou_id,
-                'create_time': lou_time
+                'create_time': lou_time,
                 # 'create_time': datetime.datetime.strptime(lou_time, "%Y-%m-%d %H:%M")
+                'page': _page,
+                'url': _url,
             })
     return data_list
 
@@ -75,7 +77,7 @@ def get_first_page(url):
     # print(article_title)
 
     # 写入第一页内容
-    data_list = analysis_data(r_text)
+    data_list = analysis_data(1, url, r_text)
     other_url_list = []
     # for i in range(2, int(total_page)+1):
     #     other_url_list.append(other_url %(tid, str(i)))
@@ -95,3 +97,27 @@ def get_first_page(url):
     # f.close()
 
 # get_first_page(base_url)
+
+
+def get_other_page(url):
+    # 网页请求
+    r_text = get_content(url)
+    d = pq(r_text)
+    if '載入頁面失敗' in d.text():
+        return None
+    # 提取总页数
+    # total_page = d("#last").attr('href').split('=')[-1]
+    total_page = 1
+    for page in d(".pages a").items():
+        if page.attr('href'):
+            total_page = page.attr('href').split('=')[-1]
+
+    print(total_page)
+
+    # 文章的唯一id
+    tid = url.split('/')[-1][:-5]
+    all_list = []
+    for i in range(2, int(total_page)+1):
+        _url = other_url %(tid, str(i))
+        all_list.extend(analysis_data(i, _url, get_content(_url)))
+    return all_list

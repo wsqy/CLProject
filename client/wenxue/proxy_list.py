@@ -68,7 +68,7 @@ def analysis_data(r_text):
         #     print(r.status_code)
         # else:
         #     return
-        count ++
+        count += 1
         r = requests.post(api_url, data=dic)
         print(r.status_code)
         if str(r.status_code) != '201':
