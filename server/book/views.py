@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-from .models import WebSite, Category, Article, Chapter
-from .serializers import WebSiteSerializer, CategorySerializer, ArticleSerializer, ChapterSerializer
+from book.models import WebSite, Category, Article, Chapter
+from book.serializers import WebSiteSerializer, CategorySerializer, ArticleSerializer, ChapterSerializer
 
 # Create your views here.
 
@@ -92,6 +92,17 @@ class ChapterViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        old = Chapter.objects.filter(floor = serializer.data['floor'], article = serializer.data['article'])
+        if old.count() == 0:
+            serializer.save()
+        else:
+            for oo in old:
+                if len(oo.content) < len(serializer.data['content']):
+                    oo.content = serializer.data['content']
+                    oo.save()
+
 
     def get_queryset(self):
         queryset = Chapter.objects.filter(article=self.kwargs.get('article_id'))

@@ -9,8 +9,8 @@ class BaseSetting(object):
 
 
 class GlobalSettings(object):
-    site_title = "慕学生鲜后台"
-    site_footer = "mxshop"
+    site_title = "文学交流区"
+    site_footer = "clBook"
     # menu_style = "accordion"
 
 
@@ -30,7 +30,8 @@ class ArticleAdmin(object):
 
 
 class ChapterAdmin(object):
-    list_display = ('title', 'article', 'create_time')
+    list_display = ('id', 'title', 'article', 'create_time')
+    list_display_links = ('title', 'id')
     list_filter = ('article',)
     search_fields = ('article', )
 

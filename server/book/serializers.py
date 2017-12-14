@@ -41,7 +41,3 @@ class ChapterSerializer(serializers.ModelSerializer):
         model = Chapter
         fields = "__all__"
         # exclude = ("article", )
-
-    def validate(self, data):
-        print(data)
-        return data

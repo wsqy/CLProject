@@ -11,6 +11,18 @@ red_conf = {
 
 red = RedisObj(**red_conf)
 
+key = "article_other_url:1:2"
+count = 0
+for ar in Article.objects.filter(is_end=0):
+    dic = {
+        "id": ar.id,
+        "url": ar.url,
+        "title": ar.title,
+    }
+    print(ar.id)
+    count += 1
+    red.push_task(key, json.dumps(dic))
+
 # key = "article_other_url:1:2"
 #
 # for ar in Article.objects.all():
@@ -53,11 +65,11 @@ red = RedisObj(**red_conf)
 #         counter += 1
 
 # # 更新文章的时间为最后一个章节的时间
-ars = Article.objects.filter(is_end=1)
-counter = 0
-for ar in ars:
-    c = Chapter.objects.filter(article=ar)
-    if c.count() == 1:
-        ar.create_time, ar.update_time = ar.update_time, ar.create_time
-        ar.save()
-        counter += 1
+# ars = Article.objects.filter(is_end=1)
+# counter = 0
+# for ar in ars:
+#     c = Chapter.objects.filter(article=ar)
+#     if c.count() == 1:
+#         ar.create_time, ar.update_time = ar.update_time, ar.create_time
+#         ar.save()
+#         counter += 1
