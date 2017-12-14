@@ -79,14 +79,14 @@ def get_first():
 def get_other():
     count = 0
     while count < 20:
-        # r = red.get_task(article_list_key)
-        r = {
-            "id": 2587,
-            "url": 'http://t66y.com/htm_data/20/1712/2842337.html',
-        }
-        r = json.dumps(r)
-        print(r)
-        print(type(r))
+        r = red.get_task(article_list_key)
+        # r = {
+        #     "id": 2587,
+        #     "url": 'http://t66y.com/htm_data/20/1712/2842337.html',
+        # }
+        # r = json.dumps(r)
+        # print(r)
+        # print(type(r))
         if(r):
             try:
                 r = json.loads(r)
@@ -95,26 +95,25 @@ def get_other():
             dic = get_other_page(r.get('url'))
             if not dic:
                 continue
-            print(dic)
-            break
-            # for dic_data in dic:
-            #     dic_data['url'] = r.get('url')
-            #     dic_data['page'] = 1
-            #     # dic_data['content'] = 'content'
-            #     # print("++++++")
-            #     # print(dic_data)
-            #     print("++++++")
-            #     _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
-            #     print(_url)
-            #     req = requests.post( _url, data = dic_data)
-            #     # r = requests.get( _url)
-            #     print(req.status_code)
-            #     # if(str(req.status_code) != '201'):
-            #     #     with open('re.html', 'w') as f:
-            #     #         f.write(req.text)
-            #     print("++++++")
+            # print(dic)
+            # break
+            for dic_data in dic:
+                print("++++++")
+                _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
+                print(_url)
+                req = requests.post( _url, data = dic_data)
+                # r = requests.get( _url)
+                print(req.status_code)
+                if(str(req.status_code) != '201'):
+                    with open('re.html', 'w') as f:
+                        f.write(req.text)
+                    print(req.text)
+                    print("-----")
+                    print(dic_data)
+                    return
+                print("++++++")
 
-            count += 1
+            # count += 1
             time.sleep(random.randint(1, 5))
         else:
             return
@@ -122,7 +121,8 @@ def get_other():
 
 if __name__ == '__main__':
     # main()
-    if sys.argv[1] == '1':
-        get_first()
-    else:
+    if len(sys.argv) > 1 and sys.argv[1] == '2':
         get_other()
+    else:
+
+        get_first()

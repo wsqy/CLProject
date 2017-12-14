@@ -94,13 +94,13 @@ class ChapterViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        old = Chapter.objects.filter(floor = serializer.data['floor'], article = serializer.data['article'])
+        old = Chapter.objects.filter(floor = serializer.validated_data['floor'], article = serializer.validated_data['article'])
         if old.count() == 0:
             serializer.save()
         else:
             for oo in old:
-                if len(oo.content) < len(serializer.data['content']):
-                    oo.content = serializer.data['content']
+                if len(oo.content) < len(serializer.validated_data['content']):
+                    oo.content = serializer.validated_data['content']
                     oo.save()
 
 

@@ -39,8 +39,8 @@ def analysis_data(_page, _url, r_text):
             data_list.append({
                 'title': title,
                 'content': con,
-                'floor': lou_id,
-                'create_time': lou_time,
+                'floor': int(lou_id),
+                'create_time': lou_time.strip(' ').replace(' ', 'T'),
                 # 'create_time': datetime.datetime.strptime(lou_time, "%Y-%m-%d %H:%M")
                 'page': _page,
                 'url': _url,
