@@ -27,7 +27,7 @@ def create_article(sender, instance=None, created=False, **kwargs):
 
         }
         red.push_task(redis_push_key % (settings.REDIS_KEY_ARTICLE, instance.site_id, instance.category_id), json.dumps(dic))
-		red.push_task(redis_push_key % ('article_other_url', instance.site_id, instance.category_id), json.dumps(dic))
+        red.push_task(redis_push_key % ('article_other_url', instance.site_id, instance.category_id), json.dumps(dic))
 
 
 @receiver(post_save, sender=Chapter)
