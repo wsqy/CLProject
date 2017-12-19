@@ -22,11 +22,16 @@ class CategoryAdmin(object):
     list_display = ('name', 'sub_class', 'site', '')
 
 
+def proxy_invalid(modeladmin, request, queryset):
+    queryset.update(is_end=1)
+proxy_invalid.short_description = "批量设置完结文章"
+
 class ArticleAdmin(object):
-    list_display = ('title', 'update_time', 'total_page', 'is_end', 'is_display')
+    list_display = ('title', 'update_time', 'total_page', 'total_chapter', 'is_end', 'is_display')
     list_filter = ('title', 'is_end')
     search_fields = ('title', )
     list_editable=('is_end', 'is_display')
+    actions = (proxy_invalid,)
 
 
 class ChapterAdmin(object):

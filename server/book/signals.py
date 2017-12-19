@@ -24,11 +24,8 @@ def create_article(sender, instance=None, created=False, **kwargs):
             "id": instance.id,
             "url": instance.url,
 			"title": instance.title
-
         }
         red.push_task(redis_push_key % (settings.REDIS_KEY_ARTICLE, instance.site_id, instance.category_id), json.dumps(dic))
-        red.push_task(redis_push_key % ('article_other_url', instance.site_id, instance.category_id), json.dumps(dic))
-
 
 @receiver(post_save, sender=Chapter)
 def create_chapter(sender, instance=None, created=False, **kwargs):
@@ -36,4 +33,8 @@ def create_chapter(sender, instance=None, created=False, **kwargs):
         article = Article.objects.get(id=instance.article_id)
         if instance.create_time > article.update_time:
             article.update_time = instance.create_time
+            article.total_chapter += 1
+            if article.total_page < instance.page:
+                article.total_page = instance
+                article.total_page = instance
             article.save()

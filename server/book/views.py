@@ -1,4 +1,7 @@
+import json
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import status
@@ -108,3 +111,8 @@ class ChapterViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
         queryset = Chapter.objects.filter(article=self.kwargs.get('article_id'))
         return queryset
     serializer_class = ChapterSerializer
+
+
+def no_end_article(request, website_id, category_id):
+    article_list = Article.objects.filter(category=category_id, is_end=0, is_display=1).values('id', 'url', 'title', 'total_page', 'total_chapter')
+    return HttpResponse(json.dumps(list(article_list)))

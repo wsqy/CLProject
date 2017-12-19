@@ -11,7 +11,7 @@ red_conf = {
 
 red = RedisObj(**red_conf)
 
-key = "article_other_url:1:2"
+key = "article:1:2"
 count = 0
 for ar in Article.objects.filter(is_end=0):
     dic = {
@@ -75,9 +75,11 @@ for ar in Article.objects.filter(is_end=0):
 #         counter += 1
 
 # 更新文章的章节数  更新最新的楼层
-ars = Article.objects.filter(is_end=0)
-counter = 0
+ars = Article.objects.filter(is_display=1)
 for ar in ars:
-    c = Chapter.objects.filter(article=ar)
+    c = Chapter.objects.filter(article=ar).order_by('-page')
     if c.count() != 0:
-        counter += 1
+        print(ar.title)
+        ar.total_chapter = c.count()
+        ar.total_page = c[0].page
+        ar.save()

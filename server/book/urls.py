@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
-from .views import WebSiteViewset, CategoryViewset, ArticleViewset, ChapterViewset
+from .views import WebSiteViewset, CategoryViewset, ArticleViewset, ChapterViewset, no_end_article
 
 app_name = 'book'
 
@@ -19,5 +19,9 @@ router.register(r'(?P<website_id>.+)/categorys/(?P<category_id>.+)/articles', Ar
 router.register(r'(?P<website_id>.+)/categorys/(?P<category_id>.+)/articles/(?P<article_id>.+)/chapters', ChapterViewset, base_name="chapters")
 
 urlpatterns = [
+    # 网站的路由
+    url(r'^(?P<website_id>.+)/categorys/(?P<category_id>.+)/articles/no-end$', no_end_article,name='no_end_article'),
+
+    # rest framework 的路由
     url(r'^', include(router.urls)),
 ]
