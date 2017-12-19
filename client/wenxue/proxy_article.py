@@ -7,7 +7,7 @@ other_url = "https://t66y.com/read.php?tid=%s&page=%s"
 base_url = "https://t66y.com/htm_data/20/1712/2565732.html"
 # base_url = "https://t66y.com/read.php?tid=2793716&page=2"
 
-def analysis_data(_page, _url, r_text):
+def analysis_data(_page, r_text):
     data_list = []
     d = pq(r_text)
     # 查找楼层
@@ -43,7 +43,6 @@ def analysis_data(_page, _url, r_text):
                 'create_time': lou_time.strip(' ').replace(' ', 'T'),
                 # 'create_time': datetime.datetime.strptime(lou_time, "%Y-%m-%d %H:%M")
                 'page': _page,
-                'url': _url,
             })
     return data_list
 
@@ -77,7 +76,7 @@ def get_first_page(url):
     # print(article_title)
 
     # 写入第一页内容
-    data_list = analysis_data(1, url, r_text)
+    data_list = analysis_data(1, r_text)
     other_url_list = []
     # for i in range(2, int(total_page)+1):
     #     other_url_list.append(other_url %(tid, str(i)))
@@ -119,5 +118,37 @@ def get_other_page(url):
     all_list = []
     for i in range(2, int(total_page)+1):
         _url = other_url %(tid, str(i))
-        all_list.extend(analysis_data(i, _url, get_content(_url)))
+        all_list.extend(analysis_data(i, get_content(_url)))
+    return all_list
+
+
+def get_update_page(url, _page=1):
+    all_list = []
+    # 文章的唯一id
+    tid = url.split('/')[-1][:-5]
+    print(tid)
+    if _page != 1:
+        url = other_url %(tid, str(_page))
+    r_text = get_content(url)
+    d = pq(r_text)
+    if '載入頁面失敗' in d.text():
+        return None
+
+    total_page = 1
+    for page in d(".pages a").items():
+        if page.attr('href'):
+            total_page = page.attr('href').split('=')[-1]
+
+    print(total_page)
+
+    _temp_data_list = analysis_data(_page, r_text)
+    if _temp_data_list is None:
+        return None
+    else:
+        all_list = _temp_data_list
+
+    for i in range(int(_page)+1, int(total_page)+1):
+        _url = other_url %(tid, str(i))
+        all_list.extend(analysis_data(i, get_content(_url)))
+
     return all_list

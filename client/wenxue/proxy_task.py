@@ -9,7 +9,7 @@ import random
 import requests
 from client import settings
 from client.RedisObj import RedisObj
-from client.wenxue.proxy_article import get_first_page, get_other_page
+from client.wenxue.proxy_article import get_update_page
 
 red_conf = {
     'REDIS_HOST': settings.REDIS_HOST,
@@ -22,9 +22,6 @@ red = RedisObj(**red_conf)
 redis_push_key = "%s:%s:%s"
 article_key = redis_push_key % (settings.REDIS_KEY_ARTICLE, 1, 2)
 article_list_key = redis_push_key % (settings.REDIS_KEY_ARTICLE_LIST, 1, 2)
-# r = red.get_task(key)
-# print(r)
-# print(json.loads(r))
 
 def get_first():
     count = 0
@@ -118,11 +115,30 @@ def get_other():
         else:
             return
 
+def get_all():
+    count = 0
+    while count < 20:
+        r = red.get_task(article_key)
+        if(r):
+            try:
+                r = json.loads(r)
+            except TypeError as e:
+                r = json.loads(r.decode("utf-8"))
+            dic = get_update_page(r.get('url'), r.get('current', 1))
+            if not dic:
+                continue
+            for dic_data in dic:
+                print("++++++")
+                _url = settings.WENXUE_ARTICLE_CHAPTER_URL % str(r.get('id'))
+                print(_url)
+                req = requests.post( _url, data = dic_data)
+                print(req.status_code)
+                print("++++++")
+
+            # count += 1
+            time.sleep(random.randint(1, 5))
+        else:
+            return
 
 if __name__ == '__main__':
-    # main()
-    if len(sys.argv) > 1 and sys.argv[1] == '2':
-        get_other()
-    else:
-
-        get_first()
+    get_all()

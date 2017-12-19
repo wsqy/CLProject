@@ -39,7 +39,7 @@ def analysis_data(r_text):
     per_list = d.find('.tr3.t_one.tac').items()
     count = 0
     for per in per_list:
-        if count > 10:
+        if count > 20:
             return
         # print(per)
         # title
