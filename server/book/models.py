@@ -51,6 +51,8 @@ class Article(models.Model):
     update_time = models.DateTimeField(verbose_name="更新时间", default=timezone.now)
     total_page = models.IntegerField(default=1, verbose_name="当前页数")
     is_end = models.BooleanField(default=False, verbose_name="是否完结")
+    is_display = models.BooleanField(default=True, verbose_name="文章是否显示")
+    total_chapter = models.IntegerField(default=0, verbose_name="文章章节数", validators=int_validators(_min=0, _max=0.0))
     # name 作者名
     author = models.CharField(max_length=256, null=True, blank=True, verbose_name="作者信息")
 
@@ -72,14 +74,16 @@ class Chapter(models.Model):
     article = models.ForeignKey("Article", verbose_name="所属文章", null=False)
     title = models.CharField(max_length=255, verbose_name="章节名", null=True, blank=True)
     content = models.TextField(blank=True, null=True,verbose_name="章节内容")
-    url = models.URLField(blank=True, verbose_name="所在分页地址")
     create_time = models.DateTimeField(verbose_name="创建时间", default=timezone.now)
     page = models.IntegerField(default=1, verbose_name="所在分页")
     floor = models.IntegerField(default=0, verbose_name="所在楼层")
+    is_display = models.BooleanField(default=True, verbose_name="章节是否显示")
 
     class Meta:
         verbose_name = "章节"
+
         verbose_name_plural = verbose_name
+        ordering = ("floor", "create_time")
 
     def __str__(self):
         return self.title

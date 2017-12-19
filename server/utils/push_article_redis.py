@@ -73,3 +73,11 @@ for ar in Article.objects.filter(is_end=0):
 #         ar.create_time, ar.update_time = ar.update_time, ar.create_time
 #         ar.save()
 #         counter += 1
+
+# 更新文章的章节数  更新最新的楼层
+ars = Article.objects.filter(is_end=0)
+counter = 0
+for ar in ars:
+    c = Chapter.objects.filter(article=ar)
+    if c.count() != 0:
+        counter += 1

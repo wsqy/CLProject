@@ -24,11 +24,11 @@ import xadmin
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'^xadmin/', xadmin.site.urls),
+    url(r'^myadmin/', xadmin.site.urls),
     url(r'websites/', include('book.urls')),
 ]
 if settings.DEBUG:
     urlpatterns.append(url(r'docs/', include_docs_urls(title="追新小说")),)
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

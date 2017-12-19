@@ -23,17 +23,18 @@ class CategoryAdmin(object):
 
 
 class ArticleAdmin(object):
-    list_display = ('title', 'update_time', 'total_page', 'is_end')
+    list_display = ('title', 'update_time', 'total_page', 'is_end', 'is_display')
     list_filter = ('title', 'is_end')
     search_fields = ('title', )
-    list_editable=('is_end', )
+    list_editable=('is_end', 'is_display')
 
 
 class ChapterAdmin(object):
-    list_display = ('id', 'title', 'article', 'create_time')
+    list_display = ('id', 'title', 'article', 'create_time', 'is_display')
     list_display_links = ('title', 'id')
     list_filter = ('article',)
     search_fields = ('article', )
+    list_editable = ('is_display',)
 
 
 xadmin.site.register(WebSite, WebSiteAdmin)

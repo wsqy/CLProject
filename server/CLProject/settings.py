@@ -147,12 +147,14 @@ USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地�
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static").replace('\\', '/')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "book", "static").replace('\\', '/'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+#
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "book", "static")
+# ]
+
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media").replace('\\', '/')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 REDIS_HOST = '123.206.210.196'
 REDIS_PORT = '6379'
