@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% block left_content %}
+    <div class="topnews">
+        {% for article in article_list %}
+          <div class="blogs">
+            <ul>
+              <h3><a href="{% url 'book:article_chapter' article.id %}">{{ article.title }}</a></h3>
+            </ul>
+          </div>
+        {% endfor %}
+    </div>
+{% include "book/page_paginator.html" %}
+{% endblock %}

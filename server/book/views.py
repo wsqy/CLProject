@@ -1,17 +1,20 @@
 import json
+import logging
+
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
 
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 
-
 from book.models import WebSite, Category, Article, Chapter
 from book.serializers import WebSiteSerializer, CategorySerializer, ArticleSerializer, ChapterSerializer
 
-# Create your views here.
+
+logger = logging.getLogger('blog.views')
 
 
 class WebSiteViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -116,3 +119,29 @@ class ChapterViewset(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retr
 def no_end_article(request, website_id, category_id):
     article_list = Article.objects.filter(category=category_id, is_end=0, is_display=1).values('id', 'url', 'title', 'total_page', 'total_chapter')
     return HttpResponse(json.dumps(list(article_list)))
+
+
+# 分页代码
+def getPage(request, article_list, pageArticleNum=10):
+    page_paginator = Paginator(article_list, pageArticleNum)
+    try:
+        page = int(request.GET.get("page", 1))
+        article_list = page_paginator.page(page)
+    # except Exception as e:
+    except (EmptyPage, InvalidPage, PageNotAnInteger) as e:
+        logger.error(e)
+        # 出错默认跳转至第一页
+        article_list = page_paginator.page(1)
+    return article_list
+
+
+def article_list(request):
+    article_list = Article.objects.filter(is_display=1).exclude(total_chapter=0)
+    article_list = getPage(request, article_list, 20)
+    return render(request, 'book/article_list.html', {"article_list": article_list})
+
+def article_chapter(request, article_id):
+    article_list = Chapter.objects.filter(article=article_id)
+    article_list = getPage(request, article_list, 1)
+    # print(chapter_list)
+    return render(request, 'book/chapter_list.html', {"article_list": article_list})

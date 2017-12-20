@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% block left_content %}
+    <div class="topnews">
+        {% for chapter in article_list %}
+          <div class="blogs">
+            <ul>
+                <span>{{ chapter.content }}</span>
+            </ul>
+          </div><br/><br/><br/>
+        {% endfor %}
+    </div>
+{% include "book/page_paginator.html" %}
+{% endblock %}

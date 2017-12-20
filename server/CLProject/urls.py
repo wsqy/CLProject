@@ -19,13 +19,14 @@ from django.conf.urls import url, include
 # from django.contrib import admin
 
 from rest_framework.documentation import include_docs_urls
-
 import xadmin
+
+
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^myadmin/', xadmin.site.urls),
-    url(r'websites/', include('book.urls')),
+    url(r'^', include('book.urls')),
 ]
 if settings.DEBUG:
     urlpatterns.append(url(r'docs/', include_docs_urls(title="追新小说")),)
